@@ -1,0 +1,32 @@
+version : '3'
+services :
+  glpi :
+    image : turgon37/glpi
+    container_name : glpi-server
+    environment:
+      GLPI_REMOVE_INSTALLER : 'no'
+      GLPI_CHMOD_PATHS_FILES : 'yes'
+      GLPI_INSTALL_PLUGINS : 'ocsinventoryng|https://github.com/pluginsGLPI/ocsinventoryng/releases/download/1.5.4/glpi-ocsinventoryng-1.5.4.tar.gz,fusioninventory|https://github.com/fusioninventory/fusioninventory-for-glpi/releases/download/glpi9.3%2B1.2/fusioninventory-9.3+1.2.tar.gz'
+    ports:
+      - 8000:80
+    volumes :
+      - data-glpi:/var/www/files
+      - data-glpi-config:/var/www/config
+
+  db :
+    image : mysql:5.7
+    container_name : glpi-db
+    restart : always
+    environment :
+      MYSQL_ROOT_PASSWORD : root
+      MYSQL_USER : admin
+      MYSQL_PASSWORD : admin
+      MYSQL_DATABASE : glpidb
+    ports :
+      - 3306:3306
+
+volumes :
+  data-glpi : 
+    driver : local
+  data-glpi-config : 
+    driver : local
