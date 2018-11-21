@@ -1,7 +1,7 @@
 version : '3'
 services :
   glpi :
-    image : turgon37/glpi
+    image : .
     container_name : glpi-server
     environment:
       GLPI_REMOVE_INSTALLER : 'no'

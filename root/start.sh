@@ -107,6 +107,21 @@ if [ "x${GLPI_CHMOD_PATHS_FILES}" = 'xyes' ]; then
 fi
 
 
+if ["x${GLPI_ADD_HTACCESS_TO_INSTALLER}" = 'xyes']; then
+  cat <<END > "${basedir}/install/.htaccess"
+<IfModule mod_authz_core.c>
+    Require local
+</IfModule>
+<IfModule !mod_authz_core.c>
+    order deny, allow
+    deny from all
+    allow from 127.0.0.1
+    allow from ::1
+</IfModule>
+ErrorDocument 403 "<p><b>Restricted area.</b><br />Only local access allowed.<br />Check your configuration or contact your administrator.</p>"
+END
+fi
+
 ## Start
 echo 'Starting up...'
 exec /usr/bin/supervisord --configuration /etc/supervisord.conf
